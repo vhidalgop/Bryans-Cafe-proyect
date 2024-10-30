@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<div id="menu"></div> <!-- Este contenedor cargará el menú dinámicamente -->
+
+
+<head>
+    <meta charset="utf-8">
+    <title>Bryan’s Café </title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free Website Template" name="keywords">
+    <meta content="Free Website Template" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"> 
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/style.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navbar Start -->
+    <div class="container-fluid p-0 nav-bar">
+        <nav class="navbar navbar-expand-lg bg-none navbar-dark py-3">
+            <a href="index.html" class="navbar-brand px-lg-4 m-0">
+                <h1 class="m-0 display-4 text-uppercase text-white">Bryan’s Café </h1>
+            </a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                <div class="navbar-nav ml-auto p-4">
+                    <a href="index.html" class="nav-item nav-link">About</a>
+                    <a href="menu.html" class="nav-item nav-link active">Menu</a>
+                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- Navbar End -->
+
+
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header mb-5 position-relative overlay-bottom">
+        <div class="d-flex flex-column align-items-center justify-content-center pt-0 pt-lg-5" style="min-height: 400px">
+            <h1 class="display-4 mb-3 mt-0 mt-lg-5 text-white text-uppercase">Menu</h1>
+            <div class="d-inline-flex mb-lg-5">
+                <p class="m-0 text-white"><a class="text-white" href="">About</a></p>
+                <p class="m-0 text-white px-2">/</p>
+                <p class="m-0 text-white">Menu</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+    <!-- Menu Start -->
+     <!-- Meals Section -->
+    <div class="container-fluid pt-5" id="mealsContainer"></div>
+
+    <!-- Beverages Section -->
+    <div class="container-fluid pt-5" id="beveragesContainer"></div>
+
+    <!-- Other Beverages Section -->
+    <div class="container-fluid pt-5" id="otherBeveragesContainer"></div>
+
+    <script>
+        fetch('menu.xml')
+            .then(response => response.text())
+            .then(data => {
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(data, 'application/xml');
+
+                // Meals Section
+                const mealsContainer = document.getElementById('mealsContainer');
+                const meals = xml.querySelectorAll('meals meal');
+
+                const mealsTitle = document.createElement('div');
+                mealsTitle.className = 'section-title';
+                mealsTitle.innerHTML = '<h4 class="text-primary text-uppercase" style="letter-spacing: 5px;">Meals</h4>';
+                mealsContainer.appendChild(mealsTitle);
+
+                meals.forEach(meal => {
+                    const name = meal.querySelector('name').textContent;
+                    const price = meal.querySelector('price').textContent;
+                    const description = meal.querySelector('description').textContent;
+                    const image = meal.querySelector('image').textContent;
+
+                    mealsContainer.innerHTML += `
+                        <div class="row align-items-center mb-5">
+                            <div class="col-4 col-sm-3">
+                                <img class="w-100 rounded-circle mb-3 mb-sm-0" src="${image}" alt="${name}">
+                                <h5 class="menu-price">${price}</h5>
+                            </div>
+                            <div class="col-8 col-sm-9">
+                                <h4>${name}</h4>
+                                <p class="m-0">${description}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Beverages Section
+                const beveragesContainer = document.getElementById('beveragesContainer');
+                const beverages = xml.querySelectorAll('beverages beverage');
+
+                const beveragesTitle = document.createElement('div');
+                beveragesTitle.className = 'section-title';
+                beveragesTitle.innerHTML = '<h4 class="text-primary text-uppercase" style="letter-spacing: 5px;">Beverages</h4>';
+                beveragesContainer.appendChild(beveragesTitle);
+
+                beverages.forEach(beverage => {
+                    const name = beverage.querySelector('name').textContent;
+                    const price = beverage.querySelector('price').textContent;
+                    const description = beverage.querySelector('description') ? beverage.querySelector('description').textContent : '';
+                    const image = beverage.querySelector('image').textContent;
+
+                    beveragesContainer.innerHTML += `
+                        <div class="row align-items-center mb-5">
+                            <div class="col-4 col-sm-3">
+                                <img class="w-100 rounded-circle mb-3 mb-sm-0" src="${image}" alt="${name}">
+                                <h5 class="menu-price">${price}</h5>
+                            </div>
+                            <div class="col-8 col-sm-9">
+                                <h4>${name}</h4>
+                                <p class="m-0">${description}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Other Beverages Section
+                const otherBeveragesContainer = document.getElementById('otherBeveragesContainer');
+                const otherBeverages = xml.querySelectorAll('otherBeverages otherBeverage');
+
+                const otherBeveragesTitle = document.createElement('div');
+                otherBeveragesTitle.className = 'section-title';
+                otherBeveragesTitle.innerHTML = '<h4 class="text-primary text-uppercase" style="letter-spacing: 5px;">Other Beverages</h4>';
+                otherBeveragesContainer.appendChild(otherBeveragesTitle);
+
+                otherBeverages.forEach(otherBeverage => {
+                    const name = otherBeverage.querySelector('name').textContent;
+                    const price = otherBeverage.querySelector('price').textContent;
+                    const image = otherBeverage.querySelector('image').textContent;
+
+                    otherBeveragesContainer.innerHTML += `
+                        <div class="row align-items-center mb-5">
+                            <div class="col-4 col-sm-3">
+                                <img class="w-100 rounded-circle mb-3 mb-sm-0" src="${image}" alt="${name}">
+                                <h5 class="menu-price">${price}</h5>
+                            </div>
+                            <div class="col-8 col-sm-9">
+                                <h4>${name}</h4>
+                            </div>
+                        </div>
+                    `;
+                });
+            })
+            .catch(error => console.log('Error loading XML:', error));
+    </script>
+
+    <!-- Menu End -->
+
+
+    <body>
+        <!-- Footer Start -->
+        <div class="container-fluid footer text-white mt-5 pt-5 px-0 position-relative overlay-top">
+            <div class="container-fluid text-center text-white border-top mt-4 py-4 px-sm-3 px-md-5" style="border-color: rgba(256, 256, 256, .1) !important;">
+                <p class="mb-2 text-white">&copy; <a class="font-weight-bold" href="Privacy-policy.pdf">Privacy Policy</a>. <span id="currentYear"></span> Bryan Cafe.</p>
+            </div>
+        </div>
+        <!-- Footer End -->
+    
+        <script>
+            // JavaScript function to set the current year
+            function setCurrentYear() {
+                var year = new Date().getFullYear(); // Get the current year
+                document.getElementById("currentYear").textContent = year; // Set it in the footer
+            }
+    
+            // Call the function to update the year when the page loads
+            setCurrentYear();
+        </script>
+    </body>
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Contact Javascript File -->
+    <script src="mail/jqBootstrapValidation.min.js"></script>
+    <script src="mail/contact.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+
+
+
+
+
+
+
+<script>
+    // Función para cargar el archivo XML del menú
+    function loadMenu() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'menu.xml', true); // Asegúrate de que menu.xml esté en el mismo directorio que menu.html
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                displayMenu(xhr);
+            }
+        };
+        xhr.send();
+    }
+
+    // Función para mostrar el menú en la página HTML
+    function displayMenu(xml) {
+        const xmlDoc = xml.responseXML;
+        const meals = xmlDoc.getElementsByTagName("meal");
+        const beverages = xmlDoc.getElementsByTagName("beverage");
+
+        let menuHTML = '<h4 class="text-primary text-uppercase" style="letter-spacing: 5px;">Meals</h4>';
+        
+        for (let i = 0; i < meals.length; i++) {
+            const name = meals[i].getElementsByTagName("name")[0].childNodes[0].nodeValue;
+            const price = meals[i].getElementsByTagName("price")[0].childNodes[0].nodeValue;
+            const description = meals[i].getElementsByTagName("description")[0].childNodes[0].nodeValue;
+            const image = meals[i].getElementsByTagName("image")[0].childNodes[0].nodeValue;
+            
+            menuHTML += `
+                <div class="row align-items-center mb-5">
+                    <div class="col-4 col-sm-3">
+                        <img class="w-100 rounded-circle mb-3 mb-sm-0" src="${image}" alt="">
+                        <h5 class="menu-price">${price}</h5>
+                    </div>
+                    <div class="col-8 col-sm-9">
+                        <h4>${name}</h4>
+                        <p class="m-0">${description}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        menuHTML += '<h4 class="text-primary text-uppercase" style="letter-spacing: 5px;">Beverages</h4>';
+
+        for (let i = 0; i < beverages.length; i++) {
+            const name = beverages[i].getElementsByTagName("name")[0].childNodes[0].nodeValue;
+            const price = beverages[i].getElementsByTagName("price")[0].childNodes[0].nodeValue;
+            const image = beverages[i].getElementsByTagName("image")[0].childNodes[0].nodeValue;
+
+            menuHTML += `
+                <div class="row align-items-center mb-5">
+                    <div class="col-4 col-sm-3">
+                        <img class="w-100 rounded-circle mb-3 mb-sm-0" src="${image}" alt="">
+                        <h5 class="menu-price">${price}</h5>
+                    </div>
+                    <div class="col-8 col-sm-9">
+                        <h4>${name}</h4>
+                    </div>
+                </div>
+            `;
+        }
+
+        document.getElementById("menu").innerHTML = menuHTML;
+    }
+
+    // Llamar a la función al cargar la página
+    window.onload = loadMenu;
+</script>
+
+
+</html>

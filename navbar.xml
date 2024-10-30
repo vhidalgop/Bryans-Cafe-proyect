@@ -1,0 +1,24 @@
+<!-- navbar.xml -->
+<navigation>
+    <brand>
+        <name>Bryan’s Café</name>
+        <homepage>index.html</homepage>
+    </brand>
+    <items>
+        <item>
+            <name>About</name>
+            <link>index.html</link>
+            <active>true</active>
+        </item>
+        <item>
+            <name>Menu</name>
+            <link>menu.html</link>
+            <active>false</active>
+        </item>
+        <item>
+            <name>Contact</name>
+            <link>contact.html</link>
+            <active>false</active>
+        </item>
+    </items>
+</navigation>
